@@ -5,7 +5,7 @@
 - Xóa các dòng trống: `:g/^$/d`
 - Xóa các dòng chứa số : `:g/\d/d` - với `:g/` là lệnh để áp dụng hành động trên các dòng khớp với mẫu tìm kiếm. `\d` là mẫu tìm kiếm biểu diễn bất kỳ chữ số nào. `d` là xóa dòng. Có thể thay g bằng v để xóa các dòng không chứa chữ số.
 - Xóa ký tự cuối của mỗi dòng với số lượng lớn `%s/.\{10}$//` -> xóa 10 ký tự cuối dòng
-- Xóa ký tự đầu của mỗi dòng với số lượng lớn `%s/^.\{10}//' -> Xóa 10 ký tự đầu dòng
+- Xóa ký tự đầu của mỗi dòng với số lượng lớn `%s/^.\{10}//` -> Xóa 10 ký tự đầu dòng
 - Xóa các dòng có chứa mẫu cụ thể: `:g/pattern/d`
 - Chèn sau 1 chuỗi ký tự cụ thể: `%s/example/example;/` -> Tìm kiếm `example` và thêm `;` vào cuối từ example trên mỗi dòng
 - Tìm kiếm chuỗi ký tự: `/string` -> tìm kiếm từ vị trí con trỏ xuống dưới
