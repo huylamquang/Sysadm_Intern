@@ -45,6 +45,12 @@ Sử dụng Source Code - Mã nguồn mở
 - Cải thiện bảo mật và tính ổn định vì các bản cập nhật thường có các bản vá bảo mật quan trọng
 -`apt upgrade`: Nâng cấp các gói phần mềm đã cài đặt lên phiên bản mới nhất. Chỉ nâng cấp các gói đã có sẵn mà không thêm hay gỡ bỏ các gói khác.
 - `/var/lib/dpkg/status`: Tệp chứa thông tin về tất cả các gói đã được cài đặt trên hệ thống gồm tên, phiên bản, trạng thái, mô tả, phụ thuộc, .... Là nơi so sánh phiên bản với các gói mới nhất được cập nhật từ repo và lưu trữ tại `/var/lib/apt/lists/`
+## Startup Scripts
+### Sử dụng systemd
+### Sử dụng Crontab
+### Sử dụng  etc/rc.local
+## FS ext4 và xfs, partition và các lệnh mkfs, fdisk, fsck, mount, umount
+
 
 
 
