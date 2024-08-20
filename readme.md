@@ -1,5 +1,5 @@
 # Vim
-## Các vấn đề vim có thể làm ở chế độ normal
+## Các vấn đề vim có thể làm ở chế độ lệnh
 - Chèn thêm ký tự vào cuối dòng: `%s/$/;/` -> chèn ký tự `;` vào cuối mỗi dòng. Thay thế `$` bằng `^` nếu muốn chèn vào đầu dòng. 
 - Xóa ký tự cuối của mỗi dòng: `%s/.$//` với `.` đại diện cho 1 ký tự cuối dòng. Giả sử `%/...$//` thì `.` đại diện cho 3 ký tự cuối cùng.
 - Xóa ký tự cuối của mỗi dòng với số lượng lớn `%s/.\{10}$//` -> xóa 10 ký tự cuối dòng
@@ -9,6 +9,10 @@
 
 - `>` và `<` : sử dụng để thụt lề vào ra - Kết hợp với việc sử dụng `v` để bôi đen 
 - Tạo 1 shell script bằng vim: `vim script.sh` và chạy script bằng `./script.sh`. Lưu ý: sau khi tạo file.sh cần cấp quyền thực thi cho nó.
+- Lưu phiên làm việc: `:mksesstion session.vim`
+- Khôi phục phiên làm việc đã lưu: `:source sesstion.vim`
+- Chạy 1 lệnh shell và xem kết quả: `!ls`
+- 
 # Package và cài đặt phần mềm
 ## Các khái niệm - Vị trí của chúng trong hê thống
 - Repo: Kho lưu trữ các URL của package
