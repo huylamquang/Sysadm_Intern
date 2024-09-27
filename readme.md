@@ -51,12 +51,56 @@ Sử dụng Source Code - Mã nguồn mở
 - Cải thiện bảo mật và tính ổn định vì các bản cập nhật thường có các bản vá bảo mật quan trọng
 -`apt upgrade`: Nâng cấp các gói phần mềm đã cài đặt lên phiên bản mới nhất. Chỉ nâng cấp các gói đã có sẵn mà không thêm hay gỡ bỏ các gói khác.
 - `/var/lib/dpkg/status`: Tệp chứa thông tin về tất cả các gói đã được cài đặt trên hệ thống gồm tên, phiên bản, trạng thái, mô tả, phụ thuộc, .... Là nơi so sánh phiên bản với các gói mới nhất được cập nhật từ repo và lưu trữ tại `/var/lib/apt/lists/`
-## Startup Scripts
-### Sử dụng systemd
+## Startup Scripts: Tự động chạy tác vụ khi hệ thống vừa khởi động
 ### Sử dụng Crontab
-### Sử dụng  etc/rc.local
-## FS ext4 và xfs, partition và các lệnh mkfs, fdisk, fsck, mount, umount
+Các bước thiết lập:
+- B1: tạo file.sh
 
+  ![image](https://github.com/user-attachments/assets/028353f3-24f0-4237-8c19-6af49301de19)
+- B2: cấu hình file `crontab -e`
+
+  ![image](https://github.com/user-attachments/assets/1c0bb6e4-4ab2-45e9-bebf-13e02a6d664b)
+- B3: Thực hiện reboot và kiểm tra kết quả
+
+  ![image](https://github.com/user-attachments/assets/8708f7ab-a6f5-417f-9b6d-c5b8e9cc6116)
+### Sử dụng  etc/rc.local
+Các bước thiết lập:
+- Bước 1: tạo file huy.sh
+
+  ![image](https://github.com/user-attachments/assets/9afadb5a-2f3b-4a17-8fa0-b1b20e3dcb1f)
+
+- Bước 2: cấu hinh file /etc/rc.local
+
+  ![image](https://github.com/user-attachments/assets/f09c55c0-04dc-449c-ae97-735e2dd09333)
+
+- Bước 3: kiểm tra cấu hình
+
+  ![image](https://github.com/user-attachments/assets/306f8486-d8a4-4193-8d10-89ed0796209d)
+
+## FS ext4 và xfs, partition và các lệnh mkfs, fdisk, fsck, mount, umount
+FS hệ thống tệp tin là 1 dạng cấu trúc dữ liệu được sử dung bởi HĐH để tổ chức và quản lý tệp tin trên 1 thiết bị ổ cứng, ổ đĩa, thẻ nhớ.
+### Những lưu ý khi chọn FS ext4 và xfs
+- Hiệu suất: Thông thường với những ứng dụng, dịch vụ phù hợp thì cả 2 FS đều đạt hiệu suất rất tốt.
+- Khả năng mở rộng và kích thước: Xfs nhỉnh hơn về khả năng mở rộng và kích thước
+- Tính toàn vẹn và phục hồi dữ liệu: Xfs nhỉnh hơn về dung lượng lưu trữ, khả năng mở rộng nhưng khả năng phục hồi không tốt bằng ext4 vì kích thước lớn.
+- Tính năng đặc biệt: Mỗi 1 fs đều có các tính năng riêng biệt phù hợp cho các mục đích dịch vụ khác nhau. 
+- Sử dụng thực tế: Tùy thuộc vào phần cứng, phần mềm ổ cứng thì sẽ cho ra những kết quả khác nhau.
+- Khả năng tương thích và hỗ trợ: Khả năn tương thích và hỗ trợ thì ext4 nhỉnh hơn và có cộng đồng sử dụng nhiều hơn.
+Nhìn chung, `EXT4` đề cao tính ổn định và phổ biến, hiệu suất và tốc độ truy cập dữ liệu tốt, tối ưu cho các tập tin có kích thước trung bình đến lớn. Tương thích tốt với tất cả bản phân phối. Nhưng giới hạn kích thước của 1 phân vùng ổ - Không tối ưu cho SSD bằng các FS khác.
+`XFS` Hiệu suất cao với các tệp lớn, phù hợp cho máy chủ và ứng lưu trữ dữ liệu. Khả năng mở rộng linh hoạt: có thể mở rộng phân vùng mà không cần umount, hữu ích khi cần tăng dung lượng lưu trữ nhanh chóng. Độ ổn định cao nhờ cơ chế kiểm tra lỗi mạnh mẽ và khả năn phục hồi. Hỗ trợ dung lượng không giới hạn. Nhưng ít phổ biến và yêu cầu kỹ thuật trong việc cấu hình khi tối ưu hệ thống.
+- Về mount: khi thực hiện mount lên 1 thư mục chứa dữ liệu thì dữ liệu trong thư mục được mount bị che khuất, không bị xóa hay ghi đè mà chỉ tạm thời không thể truy cập qua đường dẫn đó. Dữ liệu cũ sẽ xuất hiện trở lại khi ta unmount pv ra khỏi thư mục và dữ liệu vẫn đc lưu trên đĩa. Lưu ý trong việc tự động mount sử dụng fstab: Cần kiểm tra phân vùng, đảm bảo phân vùng không sử dụng( tức là không có 1 tiến trình nào sử dụng phân vùng trước khi umount or format). Đặc biệt là việc kiểm tra /etc/fstab và check cấu hình file /etc/fstab đã đúng chưa bằng lệnh 'sudo findmnt --verify --fstab` vì nếu không kiểm tra và cấu hình sai sẽ ảnh hưởng đến quá trình khởi động hệ thống.(Lệnh này sẽ cho ra các cảnh báo và lỗi cụ thể)
+  
+- Về fsck: Sử dụng để kiểm tra và sửa chữa các lỗi trên hệ thống tệp tin. Giúp duy trì tính toán toàn vẹn của hệ thống tệp tin. Yêu cầu khi sử dụng fsck: Cần có quyền root - Bắt buộc sao lưu dữ liệu trước khi thực hiện và phải umount phân vùng để đảm bảo an toan dữ liệu vì nó gây ra các lỗi hoặc hỏng dữ liệu trong quá trình kiểm tra và sửa chữa.
+- Về mkfs: Khi tạo mới hoặc sửa hệ thống tệp tin trên 1 phân vùng đã có hệ thống tệp tin và dữ liệu trước đó, hệ thống tệp tin cũ sẽ bị ghi đè và toàn bộ dữ liệu trên phân vùng đó sẽ bị mất. VD chuyển từ Ext4 sang Xfs và ngược lại. Các lưu ý khi thực hiện:
+  1. Cần xóa toàn bộ dữ liệu trên phân vùng để thay đổi FS.(Không thể thay đổi trực tiếp)
+  2. Sao lưu dữ liệu: Quá trình chuyển đổi cần định dạng lại phân vùng, điều này sẽ xóa toàn bộ dữ liệu nên cần sao lưu dữ liệu có trên pv. Lệnh sao lưu `rsync -avr /URL/dir_mnt /URL/dir_backup`.
+  3. Umount phân vùng trước khi sử dụng fsck để ktr phân vùng để đảm bảo không có lỗi trước khi chuyển đổi.
+  4. Định dạng phân vùng với XFS: `sudo mkfs.xfs /dev/sda1`
+  5. Kiểm tra và mount pv mới: `mount /dev/sda1 /DATA1`
+  6. Khôi phục dữ liệu từ bản sao lưu: `rsync -avr /URL/dir_backup /DATA1
+
+
+  
 
 
 
